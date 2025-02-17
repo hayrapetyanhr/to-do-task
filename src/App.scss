@@ -1,0 +1,311 @@
+@import "~bootstrap/scss/bootstrap";
+$primary: #7c3aed;
+$secondary: #475569;
+$white: #ffffff;
+button {
+  border: none;
+  background-color: transparent;
+  color: inherit;
+}
+ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  li {
+    margin-bottom: 10px;
+  }
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.dark {
+  $secondary: #ffffff;
+}
+
+.app-main .categories {
+  margin-top: 30px;
+  text-align: left;
+  button {
+    text-align: left;
+    &.add-cat {
+      margin: 15px 0 0;
+      padding: 7px 15px;
+      border: 1px dashed;
+      width: auto;
+      border-radius: 5px;
+    }
+  }
+}
+
+.button.primary {
+  background-color: $primary;
+  padding: 10px 25px;
+  color: $white;
+  border: none;
+  border-radius: 15px;
+}
+
+.app-main {
+  &.dark {
+    .main-content {
+      background-color: #0f172a;
+      color: #878787;
+      .task-row .task-item {
+        background-color: #141e33;
+      }
+    }
+    .left-sidebar,
+    .right-panel {
+      background-color: #141e33;
+      color: #f1f5f9;
+    }
+  }
+  .left-sidebar {
+    background-color: #f1f5f9;
+    position: fixed;
+    width: 100%;
+    max-width: 16.66666667%;
+    padding: 15px;
+    top: 0;
+    left: 0;
+    height: 100%;
+    text-align: center;
+    h1 {
+      font-size: 22px;
+      color: $secondary;
+      margin: 20px 0;
+    }
+    button {
+      width: 100%;
+    }
+  }
+
+  .main-content {
+    background-color: #e2e8f0;
+    padding: 30px;
+    height: 100vh;
+    max-width: calc(100% - 33.33333334%);
+    margin: auto;
+    .top-panel {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 55px;
+    }
+    input {
+      background-color: $white;
+      border-color: transparent;
+      border-radius: 0.5rem;
+      border-width: 2px;
+      color: #e2e8f0;
+      padding: 10px;
+      width: 300px;
+    }
+    .search-bar {
+      position: relative;
+      input {
+        color: #0f172a;
+      }
+      .search-list {
+        position: absolute;
+        background-color: #f5f5f5;
+        top: 100%;
+        left: 0;
+        right: 0;
+        border-radius: 8px;
+        z-index: 9;
+        & > div {
+          padding: 5px 10px;
+          h6 {
+            margin: 0 10px 0 0;
+          }
+        }
+        button {
+          background-color: rgb(245 202 202);
+          color: rgb(207, 21, 21);
+          text-align: center;
+          padding: 8px;
+          width: 100%;
+          border-radius: 5px;
+        }
+      }
+    }
+
+    .tasks-view {
+      margin-bottom: 25px;
+      .active svg {
+        stroke: #7c3aed;
+      }
+    }
+
+    .task-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      &.block {
+        display: block;
+        .task-item {
+          width: 100%;
+          margin-bottom: 55px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          &-button {
+            justify-content: center;
+          }
+        }
+      }
+      .task-item {
+        position: relative;
+        width: calc(25% - 15px);
+        padding: 25px 15px;
+        background-color: $white;
+        border-radius: 15px;
+        margin-bottom: 35px;
+        &-button {
+          padding: 0;
+          background-color: transparent;
+          border: 1px dashed gray;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          button {
+            background-color: transparent;
+            color: gray;
+            width: 100%;
+            height: 100%;
+            padding: 25px;
+          }
+        }
+        .item-options {
+          margin: 20px 0;
+          button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            padding: 5;
+            border-radius: 25px;
+            &.completed {
+              background-color: green;
+              color: #ffffff;
+            }
+            &.uncompleted {
+              background-color: yellow;
+            }
+          }
+        }
+        .status {
+          position: absolute;
+          bottom: 100%;
+          right: 15px;
+          background-color: rgba(255, 136, 0, 0.555);
+          color: #f1f5f9;
+          padding: 5px 10px;
+          border-top-right-radius: 5px;
+          border-top-left-radius: 5px;
+        }
+      }
+    }
+  }
+
+  .right-panel {
+    position: fixed;
+    width: 100%;
+    max-width: 16.66666667%;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background-color: #f1f5f9;
+    padding: 20px;
+    height: 100%;
+    .user-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .change-mode {
+    margin-bottom: 25px;
+    .form-switch {
+      padding-left: 0;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      input {
+        margin: 5px 0 0 15px;
+      }
+    }
+  }
+  .progressBar {
+    .aal-tasks {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.modal-form {
+  input:not([type="checkbox"]),
+  select,
+  textarea,
+  button {
+    width: 100%;
+    padding: 8px;
+  }
+  input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  & > * {
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+  }
+}
+
+.registration {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h1 {
+    margin: 50px 0 30px;
+    text-align: center;
+  }
+  & > div {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px 80px 80px;
+    width: 100%;
+    background-color: #7c3aed;
+    border-radius: 5px;
+    color: white;
+  }
+  form {
+    width: 100%;
+    label {
+      display: block;
+    }
+    input {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      outline: none;
+    }
+    button {
+      background-color: white;
+      color: #7c3aed;
+      padding: 10px 25px;
+      border-radius: 30px;
+    }
+  }
+}
