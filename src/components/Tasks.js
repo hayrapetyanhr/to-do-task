@@ -1,34 +1,17 @@
 import dayjs from "dayjs";
-import { useDispatch, useSelector } from "react-redux";
-import { setSelectedItem, setShow, setTasks } from "../redux/app/appSlice";
-export default function Tasks() {
+import { useDispatch } from "react-redux";
+import {
+  setSelectedItem,
+  setShow,
+  removeTask,
+  toggleCompleted,
+  toggleImportant,
+} from "../redux/app/appSlice";
+
+export default function Tasks({ tasks }) {
   const dispatch = useDispatch();
 
-  const { tasks, useriD } = useSelector((state) => state.app);
-
-  const removeItem = (id) => {
-    dispatch(setTasks(tasks.filter((task) => task.id !== id)));
-  };
-
-  const triggerComplated = (id) => {
-    dispatch(
-      setTasks(
-        tasks.map((task) =>
-          task.id === id ? { ...task, complated: !task.complated } : task
-        )
-      )
-    );
-  };
-
-  const triggerImportant = (id) => {
-    dispatch(
-      setTasks(
-        tasks.map((task) =>
-          task.id === id ? { ...task, important: !task.important } : task
-        )
-      )
-    );
-  };
+  const userID = JSON.parse(localStorage.getItem("currentUser"))?.userID;
 
   const editTasks = (id) => {
     const editTask = tasks.find((task) => task.id === id);
@@ -44,8 +27,8 @@ export default function Tasks() {
 
   return (
     <div className="task-row">
-      {tasks
-        .filter((item) => item.useriD === useriD)
+      {(tasks || [])
+        ?.filter((item) => item.userID === userID)
         .map((task) => {
           return (
             <div key={task.id} className="task-item">
@@ -57,18 +40,20 @@ export default function Tasks() {
               <div className="status">{task.status}</div>
               <div className="item-options">
                 <button
-                  className={task.complated ? "completed" : "uncompleted"}
-                  onClick={() => triggerComplated(task.id)}
+                  className={task.completed ? "completed" : "uncompleted"}
+                  onClick={() => dispatch(toggleCompleted(task.id))}
                 >
-                  {task.complated ? "completed" : "uncompleted"}
+                  {task.completed ? "completed" : "uncompleted"}
                 </button>
                 <button
                   className="important"
-                  onClick={() => triggerImportant(task.id)}
+                  onClick={() => dispatch(toggleImportant(task.id))}
                 >
                   {task.important ? "⭐" : "☆"}
                 </button>
-                <button onClick={() => removeItem(task.id)}>🗑️</button>
+                <button onClick={() => dispatch(removeTask(task.id))}>
+                  🗑️
+                </button>
                 <button onClick={() => editTasks(task.id)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

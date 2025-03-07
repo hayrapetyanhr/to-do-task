@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import dayjs from "dayjs";
 import AddButton from "../components/AddButton";
 import { useDispatch, useSelector } from "react-redux";
-import { setInputValue, setTasks } from "../redux/app/appSlice";
+import { setInputValue, setTasks, resetTasks } from "../redux/app/appSlice";
 
 const Header = () => {
   const date = dayjs().format("DD-MMM-YYYY");
@@ -10,9 +10,8 @@ const Header = () => {
   const { inputValue, tasks } = useSelector((state) => state.app);
   const dispatch = useDispatch();
 
-  const resetTasks = () => {
-    const storT = JSON.parse(localStorage.getItem("tasks"));
-    dispatch(setTasks(storT));
+  const handleResetTasks = () => {
+    dispatch(resetTasks());
   };
 
   const addTaskInSerachList = (id) => {
@@ -29,24 +28,17 @@ const Header = () => {
     dispatch(setInputValue(""));
   };
 
-  useEffect(() => {
-    const result = JSON.parse(localStorage.getItem("tasks") || "[]");
-    if (result) {
-      dispatch(setTasks(result));
-    }
-  }, []);
-
   return (
     <div>
       <div className="top-panel">
         <div className="search-bar">
           <input
             type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue || ""}
+            onChange={(e) => dispatch(setInputValue(e.target.value))}
             placeholder="Search task"
           />
-          <button onClick={resetTasks}>Reset</button>
+          <button onClick={handleResetTasks}>Reset</button>
           <div className="search-list">
             {tasks
               .filter(

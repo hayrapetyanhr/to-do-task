@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RightPanel from "../components/RightPanel";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { useNavigate } from "react-router-dom";
 import ModalForm from "../components/ModalForm";
 import ModalCategory from "../components/ModalCategory";
 import { setTasks, setSelectedItem } from "../redux/app/appSlice";
@@ -13,6 +14,7 @@ export const Context = React.createContext();
 const MainLayout = ({ children }) => {
   const dispatch = useDispatch();
   const { mode } = useSelector((state) => state.app);
+  const navigate = useNavigate();
 
   const updatedList = (list) => {
     dispatch(setTasks(list));
@@ -21,21 +23,23 @@ const MainLayout = ({ children }) => {
         title: "",
         date: "",
         description: "",
-        complated: false,
+        completed: false,
         important: false,
-        status: "Main",
-        userId: "",
+        status: "main",
+        userID: userID,
       })
     );
-    localStorage.setItem("tasks", JSON.stringify(list));
   };
 
-  const getUser = JSON.parse(localStorage.getItem("usersList"));
-  const getCorrentUser = JSON.parse(localStorage.getItem("currentUser"));
-  const useriD = getCorrentUser ? getCorrentUser.userID : null;
+  useEffect(() => {
+    const usersList = JSON.parse(localStorage.getItem("usersList"));
+    if (!usersList || usersList.length === 0) {
+      navigate("/register");
+    }
+  }, [navigate]);
 
-  console.log("getUser", getUser);
-  console.log("useriD", useriD);
+  const getCorrentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const userID = getCorrentUser ? getCorrentUser.userID : null;
 
   return (
     <div className={mode ? "app-main dark" : "app-main"}>

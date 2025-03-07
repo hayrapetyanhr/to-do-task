@@ -26,7 +26,7 @@ const AppRoutes = () => {
       <Route
         path="/"
         element={
-          <MainLayout type={TASKS_TYPES.ALL}>
+          <MainLayout>
             <AllTasks />
           </MainLayout>
         }
@@ -34,7 +34,7 @@ const AppRoutes = () => {
       <Route
         path="/today"
         element={
-          <MainLayout type={TASKS_TYPES.TODAY}>
+          <MainLayout>
             <Today />
           </MainLayout>
         }
@@ -42,7 +42,7 @@ const AppRoutes = () => {
       <Route
         path="/important"
         element={
-          <MainLayout type={TASKS_TYPES.IMPORTANT}>
+          <MainLayout>
             <Important />
           </MainLayout>
         }
@@ -50,7 +50,7 @@ const AppRoutes = () => {
       <Route
         path="/completed"
         element={
-          <MainLayout type={TASKS_TYPES.COMPLETED}>
+          <MainLayout>
             <Completed />
           </MainLayout>
         }
@@ -58,7 +58,7 @@ const AppRoutes = () => {
       <Route
         path="/uncompleted"
         element={
-          <MainLayout type={TASKS_TYPES.UNCOMPLETED}>
+          <MainLayout>
             <Uncompleted />
           </MainLayout>
         }
@@ -66,7 +66,7 @@ const AppRoutes = () => {
       <Route
         path={`/categories/${location?.state?.name}`}
         element={
-          <MainLayout type={TASKS_TYPES.CATEGORIES}>
+          <MainLayout>
             <Categories />
           </MainLayout>
         }

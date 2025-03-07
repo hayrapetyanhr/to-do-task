@@ -1,19 +1,12 @@
-import React, { useEffect } from "react";
-import dayjs from "dayjs";
+import React from "react";
+import { useSelector } from "react-redux";
 import Tasks from "../components/Tasks";
-import { useDispatch } from "react-redux";
-import { setTasks } from "../redux/app/appSlice";
+import dayjs from "dayjs";
 
-export default function AllTasks() {
-  const dispatch = useDispatch();
+export default function Important() {
+  const { tasks } = useSelector((state) => state.app);
+  let now = dayjs().format("YYYY-MM-DD");
+  const filteredCompleted = tasks.filter((item) => item.date.includes(now));
 
-  useEffect(() => {
-    const result = JSON.parse(localStorage.getItem("tasks") || "[]");
-    if (result) {
-      let now = dayjs().format("YYYY-MM-DD");
-      dispatch(setTasks(result.filter((task) => task.date.includes(now))));
-    }
-  }, [dispatch]);
-
-  return <Tasks />;
+  return <Tasks tasks={filteredCompleted} />;
 }

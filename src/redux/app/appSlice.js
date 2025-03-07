@@ -2,21 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   tasks: [],
+  originalTasks: [],
   mode: false,
   inputValue: "",
   selectedItem: {
     title: "",
     date: "",
     description: "",
-    complated: false,
+    completed: false,
     important: false,
-    status: "Main",
-    userId: "",
+    id: Date.now(),
+    status: "main",
+    userID: "",
   },
   show: false,
-  login: false,
   name: "",
-  password: "",
   categories: [],
   catValue: "",
   catModalShow: false,
@@ -28,6 +28,38 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
+    addTask: (state, action) => {
+      const newTask = {
+        id: Date.now(),
+        ...action.payload,
+      };
+      state.tasks.push(newTask);
+      state.originalTasks.push(newTask);
+    },
+    updateTask: (state, action) => {
+      const { id, updatedTask } = action.payload;
+      const index = state.tasks.findIndex((task) => task.id === id);
+      if (index >= 0) {
+        state.tasks[index] = { ...state.tasks[index], ...updatedTask };
+      }
+    },
+    removeTask: (state, action) => {
+      console.log("Removing task with id:", action.payload);
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+    },
+    toggleCompleted: (state, action) => {
+      const task = state.tasks.find((task) => task.id === action.payload);
+      if (task) {
+        task.completed = !task.completed;
+      }
+    },
+    toggleImportant: (state, action) => {
+      const task = state.tasks.find((task) => task.id === action.payload);
+      if (task) {
+        task.important = !task.important;
+      }
+    },
+
     setMode(state, action) {
       state.mode = action.payload;
     },
@@ -38,9 +70,10 @@ const appSlice = createSlice({
       state.maxResult = action.payload;
     },
     setTasks(state, action) {
-      console.log("state111111", state);
-      console.log("action", action);
       state.tasks = action.payload;
+    },
+    resetTasks(state) {
+      state.tasks = [...state.originalTasks];
     },
     setInputValue(state, action) {
       state.inputValue = action.payload;
@@ -53,9 +86,6 @@ const appSlice = createSlice({
     },
     setLogin(state, action) {
       state.login = action.payload;
-    },
-    setName(state, action) {
-      state.name = action.payload;
     },
     setPassword(state, action) {
       state.password = action.payload;
@@ -79,11 +109,17 @@ export const {
   setSelectedItem,
   setShow,
   setLogin,
-  setName,
+  setCurrentUserID,
   setPassword,
   setCategories,
   setCatValue,
   setCatModalShow,
+  addTask,
+  updateTask,
+  removeTask,
+  toggleCompleted,
+  toggleImportant,
+  resetTasks,
 } = appSlice.actions;
 
 export default appSlice.reducer;

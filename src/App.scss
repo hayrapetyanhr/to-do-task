@@ -290,10 +290,28 @@ a {
     border-radius: 5px;
     color: white;
   }
+  img {
+    max-width: 100%;
+  }
   form {
     width: 100%;
     label {
       display: block;
+      &.avatar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 100%;
+        img {
+          min-width: 120px;
+          height: 120px;
+          border-radius: 100%;
+        }
+        input {
+          width: auto;
+        }
+      }
     }
     input {
       width: 100%;

@@ -6,8 +6,11 @@ const Register = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState();
 
-  const date = Date.now();
+  const uploadImage = (e) => {
+    setAvatar(URL.createObjectURL(e.target.files[0]));
+  };
 
   const registerUser = (e) => {
     e.preventDefault();
@@ -15,7 +18,8 @@ const Register = () => {
       userName: userName,
       email: email,
       password: password,
-      userID: date,
+      userID: Date.now(),
+      avatar: avatar,
     };
 
     const usersList = JSON.parse(localStorage.getItem("usersList")) || [];
@@ -40,6 +44,7 @@ const Register = () => {
               type="text"
               value={userName || ""}
               placeholder="Username"
+              autocomplete
               onChange={(e) => setUserName(e.target.value)}
               required
             />
@@ -50,6 +55,7 @@ const Register = () => {
               type="email"
               value={email || ""}
               placeholder="Email"
+              autocomplete
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -57,13 +63,19 @@ const Register = () => {
           <label>
             Password
             <input
-              type="text"
+              type="password"
               value={password || ""}
               placeholder="Password"
+              autocomplete
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </label>
+          <label className="avatar">
+            <input type="file" onChange={uploadImage} />
+            {avatar && <img src={avatar} alt="Avatar" />}
+          </label>
+
           <button className="w-100 fw-bold">Register</button>
         </form>
         <button onClick={() => navigate("/login")} className="mt-4">

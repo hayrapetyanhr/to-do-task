@@ -19,15 +19,18 @@ const ModalCategory = () => {
     if (result) {
       dispatch(setCategories(result));
     }
-  }, []);
+  }, [dispatch]);
 
   const addCategory = (e) => {
     e.preventDefault();
     const newCat = {
       name: catValue,
     };
-    dispatch(setCategories([...categories, newCat]));
-    localStorage.setItem("Category", JSON.stringify(categories));
+    const updatedCategories = [...categories, newCat];
+    dispatch(setCategories(updatedCategories));
+
+    localStorage.setItem("Category", JSON.stringify(updatedCategories));
+
     dispatch(setCatModalShow(false));
     dispatch(setCatValue(""));
   };

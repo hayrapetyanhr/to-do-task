@@ -116,7 +116,7 @@ const MainLayout = ({ children, darkMode, result, maxResult, type }) => {
                 <div className="search-bar">
                   <input
                     type="text"
-                    value={inputValue}
+                    value={inputValue || ""}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Search task"
                   />

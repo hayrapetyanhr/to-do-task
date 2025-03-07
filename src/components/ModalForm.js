@@ -2,59 +2,71 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Input from "./Input";
 import { useDispatch, useSelector } from "react-redux";
-import { setShow, setSelectedItem } from "../redux/app/appSlice";
+import {
+  setShow,
+  setSelectedItem,
+  addTask,
+  updateTask,
+} from "../redux/app/appSlice";
 
 const ModalForm = ({ updatedList }) => {
   const dispatch = useDispatch();
 
-  const { tasks, show, initialStateItem, selectedItem, useriD, categories } =
-    useSelector((state) => state.app);
+  const { show, selectedItem, tasks, categories } = useSelector(
+    (state) => state.app
+  );
 
   const handleClose = () => {
     dispatch(setShow(false));
-    dispatch(setSelectedItem(initialStateItem));
+    dispatch(
+      setSelectedItem({
+        title: "",
+        date: "",
+        description: "",
+        completed: false,
+        important: false,
+        status: "main",
+        userID: "",
+      })
+    );
   };
 
-  const addTask = (e) => {
+  const getCorrentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const userID = getCorrentUser ? getCorrentUser.userID : null;
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (
       !selectedItem?.title ||
       !selectedItem?.date ||
       !selectedItem?.description
-    )
+    ) {
       return;
-
-    const isNew = !Boolean(selectedItem?.id);
-
-    const find = tasks.find(
-      (task) => task.title?.toLowerCase() === selectedItem.title?.toLowerCase()
-    );
-    if (!find) {
-      const newTask = {
-        title: selectedItem?.title,
-        date: new Date(selectedItem?.date).toISOString(),
-        description: selectedItem?.description,
-        complated: selectedItem?.complated,
-        important: selectedItem?.important,
-        status: selectedItem?.status,
-        useriD: useriD,
-      };
-
-      if (isNew) {
-        newTask.id = Date.now();
-      }
-      const newList = isNew
-        ? [...tasks, newTask]
-        : tasks.map((task) =>
-            selectedItem.id === task.id ? selectedItem : task
-          );
-
-      updatedList(newList);
-      dispatch(setSelectedItem(initialStateItem));
-      handleClose();
-    } else {
-      alert("this task is already created Broooo!!!!!!!!!!");
     }
+
+    const isNew = !selectedItem?.id;
+
+    const updatedTask = {
+      ...selectedItem,
+      userID,
+      date: new Date(selectedItem.date).toISOString(),
+    };
+
+    if (isNew) {
+      updatedTask.id = Date.now();
+      dispatch(addTask(updatedTask));
+      updatedList([...tasks, updatedTask]);
+    } else {
+      dispatch(updateTask({ id: selectedItem.id, updatedTask }));
+
+      const updatedTasks = tasks.map((task) =>
+        task.id === selectedItem.id ? updatedTask : task
+      );
+      updatedList(updatedTasks);
+    }
+
+    dispatch(setSelectedItem(selectedItem));
+    handleClose();
   };
 
   return (
@@ -63,7 +75,7 @@ const ModalForm = ({ updatedList }) => {
         <Modal.Title>Add a unbelievable task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form className="modal-form" onSubmit={addTask}>
+        <form className="modal-form" onSubmit={(e) => handleSubmit(e)}>
           <Input
             type="text"
             placeholder="Title"
@@ -106,12 +118,12 @@ const ModalForm = ({ updatedList }) => {
           <label>
             <input
               type="checkbox"
-              checked={selectedItem?.complated}
+              checked={selectedItem?.completed}
               onChange={(e) =>
                 dispatch(
                   setSelectedItem({
                     ...selectedItem,
-                    complated: !selectedItem.complated,
+                    completed: !selectedItem.completed,
                   })
                 )
               }
@@ -144,7 +156,7 @@ const ModalForm = ({ updatedList }) => {
               );
             }}
           >
-            <option value="Main">Main</option>
+            <option value="main">Main</option>
             {categories.map((item, index) => {
               return (
                 <option value={item.name} key={index}>

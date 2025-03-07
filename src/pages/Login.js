@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setLogin } from "../redux/app/appSlice";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
 
   const loginUser = (e) => {
     e.preventDefault();
@@ -15,10 +19,13 @@ const Login = () => {
       );
       if (correntUser) {
         localStorage.setItem("currentUser", JSON.stringify(correntUser));
+        dispatch(setLogin({ userID: correntUser.userID }));
         navigate("/");
       } else {
         alert("its incorrectemail or password");
       }
+    } else {
+      alert("No users found. Please register first.");
     }
   };
 
@@ -33,6 +40,7 @@ const Login = () => {
               type="text"
               value={email || ""}
               placeholder="Email"
+              autocomplete
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -40,8 +48,9 @@ const Login = () => {
           <label>
             Password
             <input
-              type="text"
+              type="password"
               value={password || ""}
+              autocomplete
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               required

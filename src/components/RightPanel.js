@@ -1,5 +1,5 @@
 import React from "react";
-import avatar from "../svg/user.png";
+import avatar2 from "../svg/user.png";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,7 @@ export default function RightPanel() {
   const user = JSON.parse(localStorage.getItem("currentUser"));
 
   const userName = user?.userName;
+  const avatar = user?.avatar;
 
   const darkMode = () => {
     dispatch(setMode(!mode));
@@ -26,14 +27,17 @@ export default function RightPanel() {
     navigate("/login");
   };
 
-  const result = tasks.filter((i) => i.complated).length;
-  const maxResult = tasks?.length || 0;
+  const result = tasks.filter(
+    (item) => item.userID === user.userID && item.completed
+  ).length;
+  const maxResult =
+    tasks.filter((item) => item.userID === user.userID)?.length || 0;
 
   return (
     <div className="right-panel">
       <div className="user-info">
         <h5>Hi, {userName || ""}!</h5>
-        <img src={avatar} alt="avatar" />
+        <img src={avatar || avatar2} alt="avatar" />
         <button onClick={logout}>Logout</button>
       </div>
       <div className="change-mode">
@@ -51,7 +55,7 @@ export default function RightPanel() {
             {`${result}`}/{`${maxResult}`}
           </div>
         </div>
-        <ProgressBar now={`${result}`} max={`${maxResult}`} />
+        <ProgressBar now={result} max={maxResult} />
       </div>
     </div>
   );
