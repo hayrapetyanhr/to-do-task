@@ -8,7 +8,6 @@ import ModalForm from "../components/ModalForm";
 import ModalCategory from "../components/ModalCategory";
 import { setTasks, setSelectedItem } from "../redux/app/appSlice";
 import "../App.scss";
-
 export const Context = React.createContext();
 
 const MainLayout = ({ children }) => {

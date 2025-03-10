@@ -15,11 +15,14 @@ export default function Tasks({ tasks }) {
 
   const editTasks = (id) => {
     const editTask = tasks.find((task) => task.id === id);
+    console.log("editTask", editTask);
     if (editTask) {
       const updatedTask = {
         ...editTask,
         date: dayjs(editTask.date).format("YYYY-MM-DD"),
       };
+
+      console.log("updaedupdatedTaskTask", updatedTask);
       dispatch(setSelectedItem(updatedTask));
     }
     dispatch(setShow(true));

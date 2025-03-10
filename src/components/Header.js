@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import dayjs from "dayjs";
-import AddButton from "../components/AddButton";
 import { useDispatch, useSelector } from "react-redux";
-import { setInputValue, setTasks, resetTasks } from "../redux/app/appSlice";
+import {
+  setInputValue,
+  setTasks,
+  resetTasks,
+  setShow,
+} from "../redux/app/appSlice";
+import MyButton from "./MyButton";
 
 const Header = () => {
   const date = dayjs().format("DD-MMM-YYYY");
@@ -38,7 +43,10 @@ const Header = () => {
             onChange={(e) => dispatch(setInputValue(e.target.value))}
             placeholder="Search task"
           />
-          <button onClick={handleResetTasks}>Reset</button>
+          {/* <button onClick={handleResetTasks}>Reset</button> */}
+          <MyButton type="text" onClick={handleResetTasks}>
+            Reset
+          </MyButton>
           <div className="search-list">
             {tasks
               .filter(
@@ -58,9 +66,12 @@ const Header = () => {
               })}
             {inputValue &&
               (tasks.find((task) => task.title.includes(inputValue)) ? (
-                <button onClick={addAllTaskInSerachList}>
+                // <button onClick={addAllTaskInSerachList}>
+                //   All results from "{inputValue}"
+                // </button>
+                <MyButton type="denger" onClick={addAllTaskInSerachList}>
                   All results from "{inputValue}"
-                </button>
+                </MyButton>
               ) : (
                 <div>No tasks found</div>
               ))}
@@ -68,7 +79,10 @@ const Header = () => {
         </div>
         <div className="date">{date}</div>
         <div className="notification">
-          <AddButton />
+          {/* <AddButton /> */}
+          <MyButton type="primary" onClick={() => dispatch(setShow(true))}>
+            Add new task
+          </MyButton>
         </div>
       </div>
     </div>
