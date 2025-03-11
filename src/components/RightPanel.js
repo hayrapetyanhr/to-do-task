@@ -5,6 +5,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode } from "../redux/app/appSlice";
 import { useNavigate } from "react-router-dom";
+import { Progress } from "antd";
 
 export default function RightPanel() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ export default function RightPanel() {
   const result = tasks.filter(
     (item) => item.userID === user.userID && item.completed
   ).length;
+
   const maxResult =
     tasks.filter((item) => item.userID === user.userID)?.length || 0;
 
@@ -56,6 +58,7 @@ export default function RightPanel() {
           </div>
         </div>
         <ProgressBar now={result} max={maxResult} />
+        <Progress strokeLinecap="butt" percent={75} lineBorderRadius={20} />
       </div>
     </div>
   );

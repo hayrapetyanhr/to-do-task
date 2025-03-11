@@ -15,7 +15,7 @@ const MyInput = ({
       name={name}
       labelCol={{ span: 24 }}
       wrapperCol={{ span: 24 }}
-      required={required}
+      rules={[{ required, message: `${labelName} is required` }]}
     >
       <Input
         value={value}

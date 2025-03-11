@@ -84,7 +84,7 @@ a {
   .main-content {
     background-color: #e2e8f0;
     padding: 30px;
-    height: 100vh;
+    min-height: 100vh;
     max-width: calc(100% - 33.33333334%);
     margin: auto;
     .top-panel {

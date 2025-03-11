@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "./Input";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,30 +11,34 @@ import { Checkbox, Form, Modal } from "antd";
 import MyButton from "./MyButton";
 import MyInput from "./MyInput";
 import MyInputDatePicker from "./MyInputDatePicker";
-import TextArea from "antd/es/input/TextArea";
 import MyCheckbox from "./MyCheckbox";
 import MyTextarea from "./MyTextarea";
+import MySelect from "./MySelect";
+
+const initialValues = {
+  title: "",
+  date: "",
+  description: "",
+  completed: false,
+  important: false,
+  status: "main",
+  userID: "",
+};
 
 const ModalForm = ({ updatedList }) => {
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
 
-  const { show, selectedItem, tasks, categories } = useSelector(
+  const { show, tasks, categories, selectedItem } = useSelector(
     (state) => state.app
   );
 
+  form.setFieldsValue(selectedItem.id ? selectedItem : initialValues);
+  dispatch(setSelectedItem(selectedItem.id ? selectedItem : initialValues));
   const handleClose = () => {
     dispatch(setShow(false));
-    dispatch(
-      setSelectedItem({
-        title: "",
-        date: "",
-        description: "",
-        completed: false,
-        important: false,
-        status: "main",
-        userID: "",
-      })
-    );
+    form.setFieldsValue(initialValues);
+    dispatch(setSelectedItem(initialValues));
   };
 
   const getCorrentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -43,17 +47,16 @@ const ModalForm = ({ updatedList }) => {
   const onFinish = (values) => {
     console.log("Success:", values);
 
-    const isNew = !values?.id;
+    const isNew = !selectedItem?.id;
 
     const updatedTask = {
       ...values,
       userID,
-      date: new Date(values.date).toISOString(),
+      date: values.date ? new Date(values.date).toISOString() : "",
     };
 
-    console.log("isNew", isNew);
-
     if (isNew) {
+      console.log("isNewmtav!!", isNew);
       updatedTask.id = Date.now();
       dispatch(addTask(updatedTask));
       updatedList([...tasks, updatedTask]);
@@ -64,15 +67,30 @@ const ModalForm = ({ updatedList }) => {
       const updatedTasks = tasks.map((task) =>
         task.id === values.id ? updatedTask : task
       );
+      console.log(updatedTasks);
       updatedList(updatedTasks);
     }
 
-    dispatch(setSelectedItem(values));
+    dispatch(
+      setSelectedItem({
+        ...values,
+        date: values.date ? new Date(values.date).toISOString() : "",
+      })
+    );
     handleClose();
   };
+
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    alert("All required fields must be filled");
   };
+
+  const options = [
+    { value: "main", label: "Main" },
+    ...categories.map((item) => ({
+      value: item.name,
+      label: item.name,
+    })),
+  ];
 
   return (
     <Modal
@@ -83,6 +101,7 @@ const ModalForm = ({ updatedList }) => {
       footer={false}
     >
       <Form
+        form={form}
         labelCol={{
           span: 24,
         }}
@@ -95,38 +114,25 @@ const ModalForm = ({ updatedList }) => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        initialValues={selectedItem}
       >
         <MyInput labelName="Title" name="title" required={true} />
-        <MyInputDatePicker
+        {/* <MyInputDatePicker
+          required={true}
           labelName="Date"
           name="date"
           style={{
             width: "100%",
           }}
+        /> */}
+        <MyTextarea
+          labelName="Desctiption"
+          name="description"
+          required={true}
         />
-        <MyTextarea labelName="Desctiption" name="description" />
         <MyCheckbox name="completed" label="Mark as completed" />
         <MyCheckbox name="important" label="Mark as important" />
-        <select
-          value={selectedItem?.status}
-          onChange={(e) => {
-            dispatch(
-              setSelectedItem({
-                ...selectedItem,
-                status: e.target.value,
-              })
-            );
-          }}
-        >
-          <option value="main">Main</option>
-          {categories.map((item, index) => {
-            return (
-              <option value={item.name} key={index}>
-                {item.name}
-              </option>
-            );
-          })}
-        </select>
+        <MySelect name="status" style={{ width: 120 }} options={options} />
         <MyButton htmlType="submit">Add a task</MyButton>
       </Form>
     </Modal>

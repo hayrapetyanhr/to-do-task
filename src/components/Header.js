@@ -8,6 +8,7 @@ import {
   setShow,
 } from "../redux/app/appSlice";
 import MyButton from "./MyButton";
+import MyInput from "./MyInput";
 
 const Header = () => {
   const date = dayjs().format("DD-MMM-YYYY");
@@ -43,6 +44,11 @@ const Header = () => {
             onChange={(e) => dispatch(setInputValue(e.target.value))}
             placeholder="Search task"
           />
+          <MyInput
+            value={inputValue}
+            onChange={(e) => dispatch(setInputValue(e.target.value))}
+            placeholder="Search Task"
+          />
           {/* <button onClick={handleResetTasks}>Reset</button> */}
           <MyButton type="text" onClick={handleResetTasks}>
             Reset
@@ -50,7 +56,7 @@ const Header = () => {
           <div className="search-list">
             {tasks
               .filter(
-                (task) => task.title.includes(inputValue) && inputValue !== ""
+                (task) => task.title?.includes(inputValue) && inputValue !== ""
               )
               .map((task) => {
                 return (

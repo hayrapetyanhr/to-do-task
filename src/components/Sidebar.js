@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCatModalShow } from "../redux/app/appSlice";
 import AddButton from "./AddButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import MyButton from "./MyButton";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -73,9 +74,18 @@ export default function Sidebar() {
             })}
           </Dropdown.Menu>
         </Dropdown>
-        <button onClick={toggleModal} className="add-cat">
+        <MyButton
+          onClick={toggleModal}
+          type="dashed"
+          style={{
+            background: "none",
+            borderColor: "white",
+            color: "white",
+            marginTop: "10px",
+          }}
+        >
           + New
-        </button>
+        </MyButton>
       </div>
     </div>
   );

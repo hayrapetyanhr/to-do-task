@@ -21,9 +21,9 @@ export default function Tasks({ tasks }) {
         ...editTask,
         date: dayjs(editTask.date).format("YYYY-MM-DD"),
       };
-
-      console.log("updaedupdatedTaskTask", updatedTask);
+      console.log("tasks", tasks);
       dispatch(setSelectedItem(updatedTask));
+      // console.log("selectedItem", selectedItem);
     }
     dispatch(setShow(true));
   };
@@ -33,7 +33,7 @@ export default function Tasks({ tasks }) {
       {(tasks || [])
         ?.filter((item) => item.userID === userID)
         .map((task) => {
-          return (
+          return !task.title.includes("d") ? (
             <div key={task.id} className="task-item">
               <div>
                 <h5>{task.title}</h5>
@@ -69,7 +69,7 @@ export default function Tasks({ tasks }) {
                 </button>
               </div>
             </div>
-          );
+          ) : null;
         })}
     </div>
   );
